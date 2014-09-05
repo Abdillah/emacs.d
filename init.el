@@ -99,12 +99,22 @@ by Prelude.")
 
 ;; the core stuff
 (require 'prelude-packages)
-(require 'prelude-ui)
+;; (require 'prelude-ui)
 (require 'prelude-custom)  ;; Needs to be loaded before core and editor
 (require 'prelude-core)
-(require 'prelude-mode)
-(require 'prelude-editor)
-(require 'prelude-global-keybindings)
+;; (require 'prelude-mode)
+;; (require 'prelude-editor)
+;; (require 'prelude-global-keybindings)
+
+;; Code: Enable White Space
+(defun prelude-enable-whitespace ()
+  "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
+  (when prelude-whitespace
+    ;; keep the whitespace decent all the time (in this buffer)
+    (add-hook 'before-save-hook 'prelude-cleanup-maybe nil t)
+    (whitespace-mode +1)))
+
+(require 'smartparens)
 
 ;; OSX specific settings
 (when (eq system-type 'darwin)
