@@ -1,11 +1,14 @@
-;;;; Navigation editor
+;;; navigation-persona --- nav personal preference
 
-;; Re-enable arrow keys
-(setq prelude-guru nil)
+;;; Commentary:
+
+;;; Code:
 (require 'spaces-as-tab-mode)
 
+(setq prelude-guru nil) ; Re-enable arrow keys
+
 ;; Code: Scroll Mode
-(setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ; one line at a time    
+(setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ; two line at a time
 (setq mouse-wheel-progressive-speed nil)            ; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't)                  ; scroll window under mouse
 
@@ -21,7 +24,12 @@
 ; (setq delete-selection-mode 0)
 
 ;; Code: Key Binding
-(define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill)
+(define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill) ; Shift + click adjust selection
 
-(define-key global-map (kbd "<right>") 'forward-char-to-tab-stop)
-(define-key global-map (kbd "<left>") 'backward-char-to-tab-stop)
+(define-key global-map (kbd "<right>") 'forward-char-to-tab-stop) ; Hack of spaces-as-tab-mode
+(define-key global-map (kbd "<left>") 'backward-char-to-tab-stop) ; Hack of spaces-as-tab-mode
+
+(define-key global-map (kbd "C-x C-b") 'buffer-menu) ; In frame buffer-list
+
+(provide 'personal-navigation)
+;;; navigation.el ends here
