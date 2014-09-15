@@ -5,9 +5,11 @@
 (setq-default mode-line-format '(
   ;mode-line-front-space
 
+  " "
+
   ; Position, including warning for reach fill-column length
-  (:propertize " cursor (%4l," face mode-line-position-face)
-  (:eval (propertize "%3c) " 'face
+  (:propertize "cur(%4l," face mode-line-position-face)
+  (:eval (propertize "%3c)" 'face
            (if (>= (current-column) fill-column)
                'mode-line-max-col-face
                'mode-line-position-face)))
@@ -16,7 +18,7 @@
 
   " | "
 
-  (:propertize " %b "
+  (:propertize "%b"
                face 'mode-line-filename-face
 			   local-map
 			     (keymap
@@ -30,7 +32,9 @@
 							 (mouse-1 . mode-line-previous-buffer)))
 				mouse-face mode-line-highlight help-echo "Buffer name\nmouse-1: Previous buffer\nmouse-3: Next buffer" face mode-line-buffer-id)
 
-  (:propertize " (" face 'mode-line-symbol-face)
+  " "
+
+  (:propertize "(" face 'mode-line-symbol-face)
   (:propertize
     (:eval (cond ((not buffer-read-only)
                          (propertize "RW" 'face 'mode-line-file-status-face))
@@ -59,12 +63,12 @@
   (:propertize " in " face 'mode-line-symbol-face)
 
   ; directory and buffer/file name
-  (:propertize (:eval (concat "[" (shorten-directory default-directory 20) "] "))
+  (:propertize (:eval (concat "[" (shorten-directory default-directory 20) "]"))
                face mode-line-folder-face)
 
   " | "
 
-  (:propertize " %3p "
+  (:propertize "%3p"
                help-echo "Size indication mode\nmouse-1: Display Line and Column Mode Menu" 
                face 'mode-line-buf-position-face
                mouse-face mode-line-highlight 
@@ -83,17 +87,18 @@
   ; narrow [default -- keep?]
   ;" %n "
   ; mode indicators: vc, recursive edit, major mode, minor modes, process, global
-  (vc-mode vc-mode)
   (:propertize "%[" face 'mode-line-symbol-face)
   (:propertize mode-name face mode-line-mode-face)
   (:propertize "%]" face 'mode-line-symbol-face)
 
-  " | "
+  " |"
 
   (:eval (propertize (format-mode-line minor-mode-alist)
                      'face 'mode-line-minor-mode-face))
 
-  ;" | "
+  " | "
+
+  (vc-mode vc-mode)
 
   mode-line-misc-info 
 

@@ -31,5 +31,7 @@
 
 (define-key global-map (kbd "C-x C-b") 'buffer-menu) ; In frame buffer-list
 
+(define-key global-map (kbd "<f12>") 'tool-bar-mode) ; Toolbar toggle appearance
+
 (provide 'personal-navigation)
 ;;; navigation.el ends here
