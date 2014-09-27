@@ -14,6 +14,7 @@
                'mode-line-max-col-face
                'mode-line-position-face)))
   ; emacsclient [default -- keep?]
+  mode-line-client
 
   " | "
 
@@ -68,9 +69,9 @@
   " | "
 
   (:propertize "%3p"
-               help-echo "Size indication mode\nmouse-1: Display Line and Column Mode Menu"
+               help-echo "Size indication mode\nmouse-1: Display Line and Column Mode Menu" 
                face 'mode-line-buf-position-face
-               mouse-face mode-line-highlight
+               mouse-face mode-line-highlight 
                local-map
  			     (keymap
  				  (mode-line keymap
@@ -99,9 +100,7 @@
 
   (vc-mode vc-mode)
 
-  mode-line-misc-info
-  ","
-  mode-line-client
+  mode-line-misc-info 
 
   (:propertize mode-line-process
                face 'mode-line-process-face)

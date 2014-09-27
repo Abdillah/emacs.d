@@ -25,6 +25,10 @@
 
 ;; Code: Key Binding
 (define-key global-map (kbd "<S-down-mouse-1>") 'mouse-save-then-kill) ; Shift + click adjust selection
+;(define-key global-map (kbd "C-S-x") 'buffer-menu) ; CUA Big Alphabet
+;(define-key global-map (kbd "C-S-c") 'copy-region-as-kill) ; CUA Big Alphabet
+;(define-key global-map (kbd "C-S-k") 'buffer-menu) ; CUA Big Alphabet
+
 
 (define-key global-map (kbd "<right>") 'forward-char-to-tab-stop) ; Hack of spaces-as-tab-mode
 (define-key global-map (kbd "<left>") 'backward-char-to-tab-stop) ; Hack of spaces-as-tab-mode

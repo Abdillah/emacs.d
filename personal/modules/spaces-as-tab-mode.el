@@ -65,6 +65,9 @@
 (setq is-shift-translated-before nil)
 (setq last-shifted-position 0)
 
+(defvar start-shift-selection-hook nil)
+(defvar end-shift-selection-hook nil)
+
 (defun forward-char-to-tab-stop (&optional N)
     "Move forward skipping char or to nearest tab-stop if in space-indented region."
     (interactive "^p")
@@ -79,7 +82,9 @@
                (push-mark (point) t t))
              (setq last-shifted-position (point))
              (right-char)
-             (setq is-shift-translated-before t))
+             (setq is-shift-translated-before t)
+             ; Hook
+             (run-hooks 'start-shift-selection-hook))
       ; else
       (if (and this-command-keys-shift-translated is-shift-translated-before)
         (progn (if (not (region-active-p)) ; Detection of active region
@@ -87,26 +92,28 @@
                (setq last-shifted-position (point))
                (forward-char N))
         ; else
-        (if (not this-command-keys-shift-translated)
-            (progn (setq is-shift-translated-before nil)
-                   (deactivate-mark)
-                   (pop-mark)))))
+        (progn (if (and (not this-command-keys-shift-translated) is-shift-translated-before)
+                   (run-hooks 'end-shift-selection-hook))
+               (if (not this-command-keys-shift-translated)
+                   (progn (setq is-shift-translated-before nil)
+                          (deactivate-mark)
+                          (pop-mark))))))
 
     (if (not this-command-keys-shift-translated)
         (dotimes (i N)
           (setq first-pos (current-column))
           (setq nearest-left-tab-stop (- first-pos (% first-pos tab-width)))
-          (setq nearest-right-tab-stop (+ first-pos (- tab-width (% first-pos tab-width)))) 
+          (setq nearest-right-tab-stop (+ first-pos (- tab-width (% first-pos tab-width))))
 
           (if (equal first-pos nearest-left-tab-stop)
               (setq is-space-indented-region t))
 
           (setq count nearest-left-tab-stop)
 
-          (setq space-count (count-specific-char ?\s 
-                                                 (+ (line-beginning-position) 
+          (setq space-count (count-specific-char ?\s
+                                                 (+ (line-beginning-position)
                                                     (column-to-char-based nearest-left-tab-stop))
-                                                 (+ (line-beginning-position) 
+                                                 (+ (line-beginning-position)
                                                     (column-to-char-based nearest-right-tab-stop))))
 
           (if (equal space-count tab-width)
@@ -127,7 +134,9 @@
                  (push-mark (point) t t))
                (setq is-shift-translated-before t)
                (setq last-shifted-position (point))
-               (backward-char))
+               (backward-char)
+               ;; Hook
+               (run-hooks 'start-shift-selection-hook))
       ; else
       (if (and this-command-keys-shift-translated is-shift-translated-before)
           (progn (if (not (region-active-p)) ; Detection of active region
@@ -135,17 +144,21 @@
                  (setq last-shifted-position (point))
                  (backward-char N))
         ; else
-        (if (not this-command-keys-shift-translated)
-            (progn (setq is-shift-translated-before nil)
-                   (deactivate-mark)
-                   (pop-mark)))))
-       
+        (if (and (not this-command-keys-shift-translated) is-shift-translated-before)
+            (progn (if (and (not this-command-keys-shift-translated) is-shift-translated-before)
+                       ;; Hooks
+                       (run-hooks 'end-shift-selection-hook))
+                   (if (not this-command-keys-shift-translated)
+                       (progn (setq is-shift-translated-before nil)
+                              (deactivate-mark)
+                              (pop-mark)))))))
+
     (if (not this-command-keys-shift-translated)
         (dotimes (i N)
           (setq first-pos (current-column))
           (setq nearest-left-tab-stop (- first-pos (% first-pos tab-width)))
           (setq nearest-right-tab-stop (+ first-pos (- tab-width (% first-pos tab-width))))
-          
+
           (if (equal first-pos nearest-right-tab-stop)
               (setq is-space-indented-region t))
 
@@ -156,10 +169,10 @@
           (if (< nearest-left-tab-stop 0)
               (setq nearest-left-tab-stop 0))
 
-	  	  (setq space-count (count-specific-char ?\s 
+	  	  (setq space-count (count-specific-char ?\s
                                                  (+ (line-beginning-position)
                                                     (column-to-char-based nearest-left-tab-stop))
-                                                 (+ (line-beginning-position) 
+                                                 (+ (line-beginning-position)
                                                     (column-to-char-based nearest-right-tab-stop))))
 
           (if (equal space-count tab-width)
