@@ -20,10 +20,11 @@
 (add-to-list 'load-path module-dir)
 
 ; Execute necessary (listed) modules
+(add-subfolders-to-load-path personal-dir)
+
 (load "~/.emacs.d/modules")
 
 (add-to-list 'load-path personal-dir)
-(add-subfolders-to-load-path personal-dir)
 
 ;; preload the personal settings
 (when (file-exists-p personal-dir)

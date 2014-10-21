@@ -25,7 +25,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary: This software make navidation on emacs easier by bypassing
-;;;             `tab-width` of spaces in forward and backward navigation.
+;;;             `standard-indentation` of spaces in forward and backward navigation.
 ;;;             Install it
 
 (defun count-specific-char (char &optional start-reg end-reg)
@@ -61,6 +61,19 @@
 
 	; Return
 	char-based-column-pos)
+
+(defun detect-block-indentation ()
+  "Detect indentation based on mode.
+This is not algorithmic but descriptive i.e. write for every mode exist."
+  (cond
+   ((string= major-mode "web-mode")
+    (progn (setplist 'plist (web-mode-point-context (point)))
+           (setq standard-indent (get 'plist ':indent-offset))))
+   ((string= major-mode "c-mode")
+    (setq standard-indent c-basic-offset))
+   (t
+    t))
+  )
 
 (setq is-shift-translated-before nil)
 (setq last-shifted-position 0)
@@ -99,11 +112,13 @@
                           (deactivate-mark)
                           (pop-mark))))))
 
+    (detect-block-indentation)     ; Detect indentation at current block
+
     (if (not this-command-keys-shift-translated)
         (dotimes (i N)
           (setq first-pos (current-column))
-          (setq nearest-left-tab-stop (- first-pos (% first-pos tab-width)))
-          (setq nearest-right-tab-stop (+ first-pos (- tab-width (% first-pos tab-width))))
+          (setq nearest-left-tab-stop (- first-pos (% first-pos standard-indent)))
+          (setq nearest-right-tab-stop (+ first-pos (- standard-indent (% first-pos standard-indent))))
 
           (if (equal first-pos nearest-left-tab-stop)
               (setq is-space-indented-region t))
@@ -116,7 +131,7 @@
                                                  (+ (line-beginning-position)
                                                     (column-to-char-based nearest-right-tab-stop))))
 
-          (if (equal space-count tab-width)
+          (if (equal space-count standard-indent)
               (move-to-column nearest-right-tab-stop)
             (right-char)))))
 
@@ -153,18 +168,20 @@
                               (deactivate-mark)
                               (pop-mark)))))))
 
+    (detect-block-indentation)     ; Detect indentation at current block
+
     (if (not this-command-keys-shift-translated)
         (dotimes (i N)
           (setq first-pos (current-column))
-          (setq nearest-left-tab-stop (- first-pos (% first-pos tab-width)))
-          (setq nearest-right-tab-stop (+ first-pos (- tab-width (% first-pos tab-width))))
+          (setq nearest-left-tab-stop (- first-pos (% first-pos standard-indent)))
+          (setq nearest-right-tab-stop (+ first-pos (- standard-indent (% first-pos standard-indent))))
 
           (if (equal first-pos nearest-right-tab-stop)
               (setq is-space-indented-region t))
 
           (if (equal first-pos nearest-left-tab-stop)
-              (progn (setq nearest-left-tab-stop (- nearest-left-tab-stop tab-width))
-                     (setq nearest-right-tab-stop (- nearest-right-tab-stop tab-width))))
+              (progn (setq nearest-left-tab-stop (- nearest-left-tab-stop standard-indent))
+                     (setq nearest-right-tab-stop (- nearest-right-tab-stop standard-indent))))
 
           (if (< nearest-left-tab-stop 0)
               (setq nearest-left-tab-stop 0))
@@ -175,7 +192,7 @@
                                                  (+ (line-beginning-position)
                                                     (column-to-char-based nearest-right-tab-stop))))
 
-          (if (equal space-count tab-width)
+          (if (equal space-count standard-indent)
               (move-to-column nearest-left-tab-stop)
             (backward-char)))))
 

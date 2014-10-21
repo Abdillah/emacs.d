@@ -40,7 +40,7 @@
 (setq mouse-wheel-follow-mouse 't)                  ; scroll window under mouse
 
 (setq scroll-step 1)               ; keyboard scroll one line at a time
-(setq scroll-conservatively 10)
+(setq scroll-conservatively 10000)
 
 (setq scroll-margin 1)
 

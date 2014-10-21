@@ -10,13 +10,6 @@
 
 (tool-bar-mode 0)
 
-(setq backup-by-copying t                             ; don't clobber symlinks
-      backup-directory-alist '(("." . "~/.emacs.d/saves"))    ; don't litter my fs tree
-      delete-old-versions t
-      kept-new-versions 6
-      kept-old-versions 2
-      version-control t)                              ; use versioned backups
-
 (defun config-change-indirect-callback ()
   "Set `config-change` variable to on, allowing callbacks."
   (setq config-changed t)
@@ -43,6 +36,11 @@
                  (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
         (make-directory dir t))))
   nil)
+
+    (let ((dir (file-name-directory filename)))
+      (when (and (not (file-exists-p dir))
+                 (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
+        (make-directory dir t)))
 
 (add-hook 'write-file-functions 'create-intermediate-dir)
 
