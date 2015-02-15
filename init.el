@@ -13,24 +13,12 @@
        (add-to-list 'load-path name)
        (add-subfolders-to-load-path name)))))
 
-
-(defvar personal-dir "~/.emacs.d/personal")
 (defvar module-dir "~/.emacs.d/modules")
 
 (add-to-list 'load-path module-dir)
-
-; Execute necessary (listed) modules
-(add-subfolders-to-load-path personal-dir)
-
-(load "~/.emacs.d/modules")
-
-(add-to-list 'load-path personal-dir)
-
-;; preload the personal settings
-(when (file-exists-p personal-dir)
-  (message "Loading personal configuration files in %s..." personal-dir)
-  (mapc 'load (directory-files personal-dir 't "^[^#].*el$")))
-
+(add-subfolders-to-load-path module-dir) ; Execute necessary (listed) modules
+(load "~/.emacs.d/modules")      ; preload all modules necessary settings
+(load "~/.emacs.d/configure")    ; preload the personal settings
 
 (defvar current-user
       (getenv

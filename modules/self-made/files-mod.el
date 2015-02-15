@@ -65,15 +65,15 @@ Before and after saving the buffer, this function runs
                   ;; non-existing directory.
                   (let ((dir (file-name-directory filename)))
                     (unless (file-directory-p dir)
-                      (if (file-exists-p dir)
-                          (error "%s is not a directory" dir)
-                        ;; (error "%s: no such directory" dir)
-                        (catch 'prompt-create
-                            (if (not (when (y-or-n-p (format "Directory %s does not exist. Create it?" dir))
-                              (make-directory dir t)))
-                                (throw 'prompt-create
-                                       (error "Dir %s does not exist (not created also)" dir))))
-                            ))))
+                      (catch 'prompt-create
+                        (if (when (y-or-n-p (format "Directory %s does not exist. Create it?" dir))
+                                   (make-directory dir t))
+                            (throw 'prompt-create
+                                   (error "Dir %s does not exist (not created also)" dir))))
+
+                      )
+                    )
+                  )
                 (set-visited-file-name filename)))
           (or (verify-visited-file-modtime (current-buffer))
               (not (file-exists-p buffer-file-name))

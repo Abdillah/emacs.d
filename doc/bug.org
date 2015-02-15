@@ -1,0 +1,17 @@
+Emacs Configuration Bug
+
+* Wish List
+1. [ ] Completion Framework
+   Status : Incomplete
+   Need a better framework which works on different file and library.
+   Also an enhanched support to other language (e.g. Vala).
+
+2. [ ] Definition Lookup
+   Status : Unavailable
+   It's global which is lack of support for this function in emacs.
+   Also global lack of support for this feature in many language.
+
+* Defect Feature
+
+
+* Strange Behaviour

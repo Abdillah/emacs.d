@@ -1,22 +1,27 @@
 ;;;; Mode Line style modules
 
 ;; Mode-line custom setup
-;
-(setq-default mode-line-format '(
-  ;mode-line-front-space
+                                        ;
+(setq separator " ") ;  (:propertize " " face mode-line-separator)
 
-  " "
+(setq-default mode-line-format '(
+  ;; mode-line-front-space
+
+  separator
 
   ; Position, including warning for reach fill-column length
-  (:propertize "cur(%4l," face mode-line-position-face)
-  (:eval (propertize "%3c)" 'face
+  (:propertize " " face mode-line-padding)
+  (:propertize "[%4l," face mode-line-position-face)
+  (:eval (propertize "%3c]" 'face
            (if (>= (current-column) fill-column)
                'mode-line-max-col-face
                'mode-line-position-face)))
+  (:propertize " " face mode-line-padding)
   ; emacsclient [default -- keep?]
 
-  " | "
+  separator
 
+  (:propertize " " face mode-line-padding)
   (:propertize "%b"
                face 'mode-line-filename-face
 			   local-map
@@ -30,10 +35,11 @@
 							 (mouse-3 . mode-line-next-buffer)
 							 (mouse-1 . mode-line-previous-buffer)))
 				mouse-face mode-line-highlight help-echo "Buffer name\nmouse-1: Previous buffer\nmouse-3: Next buffer" face mode-line-buffer-id)
+  (:propertize " " face mode-line-padding)
 
-  " "
+  separator
 
-  (:propertize "(" face 'mode-line-symbol-face)
+  (:propertize " (" face mode-line-padding)
   (:propertize
     (:eval (cond ((not buffer-read-only)
                          (propertize "RW" 'face 'mode-line-file-status-face))
@@ -56,17 +62,15 @@
     local-map
       (keymap (mode-line keymap
                 (mouse-1 . mode-line-toggle-modified))))
-
-  (:propertize ")" face mode-line-symbol-face)
-
-  (:propertize " in " face 'mode-line-symbol-face)
+  (:propertize ") in " face mode-line-padding)
 
   ; directory and buffer/file name
   (:propertize (:eval (concat "[" (shorten-directory default-directory 20) "]"))
                face mode-line-folder-face)
+  (:propertize " " face mode-line-padding)
 
-  " | "
 
+  (:propertize " " face mode-line-padding)
   (:propertize "%3p"
                help-echo "Size indication mode\nmouse-1: Display Line and Column Mode Menu"
                face 'mode-line-buf-position-face
@@ -80,37 +84,47 @@
  		  								   (line-number-mode menu-item "Display Line Numbers" line-number-mode :help "Toggle displaying line numbers in the mode-line" :button
  														   (:toggle . line-number-mode))
  										   "Toggle Line and Column Number Display"))))
+  (:propertize " " face mode-line-padding)
 
-  " | "
+  separator
 
+  (:propertize " %[" face mode-line-padding)
   ; narrow [default -- keep?]
   ;" %n "
   ; mode indicators: vc, recursive edit, major mode, minor modes, process, global
-  (:propertize "%[" face 'mode-line-symbol-face)
   (:propertize mode-name face mode-line-mode-face)
-  (:propertize "%]" face 'mode-line-symbol-face)
+  (:propertize "%] " face mode-line-padding)
 
-  " |"
+  separator
 
+  (:propertize " " face mode-line-padding)
   (:eval (propertize (format-mode-line minor-mode-alist)
                      'face 'mode-line-minor-mode-face))
+  (:propertize " " face mode-line-padding)
 
-  " | "
+  separator
 
-  (vc-mode vc-mode)
+  (:propertize " " face mode-line-padding)
+  (:propertize (vc-mode vc-mode) face 'mode-line-base-container)
+  (:propertize mode-line-misc-info face 'mode-line-base-container)
+  (:propertize " " face mode-line-padding)
 
-  mode-line-misc-info
-  ","
-  mode-line-client
+  separator
 
+  (:propertize " " face mode-line-padding)
   (:propertize mode-line-process
                face 'mode-line-process-face)
-  (global-mode-string global-mode-string)
-  "    "
+  (:propertize (global-mode-string global-mode-string)
+               face 'mode-line-base-container)
+  (:propertize " " face mode-line-padding)
+
+  separator
+
   ; nyan-mode uses nyan cat as an alternative to %p
   ;(:eval (when nyan-mode (list (nyan-create))))
 
-  " ;%-"
+  (:propertize mode-line-client face 'mode-line-base-container)
+  "%-"
   ))
 
 ;; Helper function
@@ -128,6 +142,10 @@
     output))
 
 ;; Extra mode line faces
+(make-face 'mode-line-base-container)
+; :inherit 'mode-line-base-container
+(make-face 'mode-line-padding)
+(make-face 'mode-line-separator)
 (make-face 'mode-line-symbol-face)
 (make-face 'mode-line-file-status-face)
 (make-face 'mode-line-modified-face)
@@ -140,73 +158,97 @@
 (make-face 'mode-line-process-face)
 (make-face 'mode-line-max-col-face)
 
+
 (set-face-attribute 'mode-line nil
-    :foreground "#999" :background "#b0ff80"
-    :inverse-video nil
-    :height 110
-    :box '(:line-width 3 :color "#b0ff80" :style nil))
+                    :foreground "#666" :background "#90cf60"
+                    :inverse-video nil
+                    :height 100
+                    :box '(:line-width 3 :color "#90cf60" :style nil))
+;;     :foreground "#999" :background "#b0ff80"
 
 (set-face-attribute 'mode-line-highlight nil
-    :background "#c0ee90"
-	:box nil
-)
+                    :background "#296"
+                    :foreground "white"
+                    )
 
 (set-face-attribute 'mode-line-inactive nil
-    :foreground "#999" :background "#05d090"
-    :inverse-video nil
-    :height 110
-    :box '(:line-width 3 :color "#05d090" :style nil))
+                    :foreground "#999" :background "grey"
+                    :inverse-video nil
+                    :height 100
+                    :box '(:line-width 3 :color "grey" :style nil))
+
+(set-face-attribute 'mode-line-base-container nil
+                    :height 100
+                    :background "#b0ff80"
+                    :box '(:line-width 3 :color "#b0ff80" :style nil))
+
+(set-face-attribute 'mode-line-padding nil
+                    :foreground "#333"
+                    :background "#b0ff80"
+                    :height 100
+                    :box '(:line-width 3 :color "#b0ff80" :style nil))
+
+(set-face-attribute 'mode-line-separator nil
+                    :foreground "#333"
+                    :background "#296"
+                    :height 100
+                    :box '(:line-width 3 :color "#296" :style nil))
 
 (set-face-attribute 'mode-line-symbol-face nil
-    :foreground "#000")
+                    :foreground "#000")
 
 (set-face-attribute 'mode-line-file-status-face nil
-    :inherit 'mode-line-face
-    :foreground "#4271ae"
-    :weight 'bold
-    :height 110
-    :box '(:line-width 1 :color "#4271ae"))
+                    :inherit 'mode-line-base-container
+                    :foreground "#4271ae"
+                    :weight 'bold
+                    :height 100
+                    :box '(:line-width 1 :color "#4271ae"))
 
 (set-face-attribute 'mode-line-modified-face nil
-    :inherit 'mode-line-face
-    :foreground "#c82829" :background "#ffffff"
-    :box '(:line-width 2 :color "#c82829"))
+                    :inherit 'mode-line-base-container
+                    :foreground "#c82829" :background "#ffffff"
+                    :box '(:line-width 3 :color "#b0ff80" :style nil))
 
 (set-face-attribute 'mode-line-folder-face nil
-    :inherit 'mode-line-face
-    :foreground "#000")
+                    :inherit 'mode-line-base-container
+                    :foreground "#000")
 
 (set-face-attribute 'mode-line-filename-face nil
-    :inherit 'mode-line-face
-    :foreground "#ff001a"
-    :weight 'bold)
+                    :inherit 'mode-line-base-container
+                    :foreground "#ff001a"
+                    :weight 'bold
+                    :box '(:line-width 3 :color "#b0ff80" :style nil))
 
 (set-face-attribute 'mode-line-position-face nil
-    :inherit 'mode-line-face
-    :family "Ubuntu Mono"
-    :foreground "#0000ff"
-    :height 110)
+                    :inherit 'mode-line-base-container
+                    :family "Ubuntu Mono"
+                    :foreground "#0000ff"
+                    :height 100
+                    :box '(:line-width 3 :color "#b0ff80" :style nil))
 
 (set-face-attribute 'mode-line-buf-position-face nil
-    :inherit 'mode-line-position-face)
-
+                    :inherit 'mode-line-base-container
+                    :foreground "blue")
 
 (set-face-attribute 'mode-line-mode-face nil
-    :inherit 'mode-line-face
-    :foreground "#005a00")
+                    :inherit 'mode-line-base-container
+                    :foreground "#005a00"
+                    :box nil)
 
 (set-face-attribute 'mode-line-minor-mode-face nil
-    :inherit 'mode-line-mode-face
-    :foreground "#005a00"
-    :height 110)
+                    :inherit 'mode-line-mode-face
+                    :inherit 'mode-line-base-container
+                    :foreground "#005a00"
+                    :height 100)
 
 (set-face-attribute 'mode-line-process-face nil
-    :inherit 'mode-line-face
-    :foreground "#9900ff")
+                    :inherit 'mode-line-mode-face
+                    :inherit 'mode-line-base-container
+                    :foreground "#9900ff")
 
 (set-face-attribute 'mode-line-max-col-face nil
-    :inherit 'mode-line-position-face
-    :foreground "#00f" :background "#b0ff80"
-    :weight 'bold)
+                    :inherit 'mode-line-position-face
+                    :foreground "#00f" :background "#b0ff80"
+                    :weight 'bold)
 
 (provide 'prelude-modeline)
