@@ -7,7 +7,7 @@
 (tool-bar-mode 0) ; Hide toolbar
 
 (setq backup-by-copying t                                  ; don't clobber symlinks
-      backup-directory-alist '(("." . "~/.emacs.d/saves")) ; don't litter my fs tree
+      backup-directory-alist '(("." . "~/.emacs.d/auto-save-list")) ; don't litter my fs tree
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
