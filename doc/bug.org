@@ -11,6 +11,17 @@ Emacs Configuration Bug
    It's global which is lack of support for this function in emacs.
    Also global lack of support for this feature in many language.
 
+3. [ ] Function Quick Jump
+   Status : Unavailable
+
+4. [ ] Emacs Bookmark
+   Status : Not yet found
+   This to enable jumping to important, currently edited line
+
+5. [X] Search Bi-directional
+   Status : Setup
+   Ctrl+F to search forward and Ctrl+Shift+F to backward
+
 * Defect Feature
 
 

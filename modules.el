@@ -216,6 +216,9 @@ added at the end."
 (global-unset-key (kbd "M-j"))
 (global-unset-key (kbd "M-J"))
 
+(define-key isearch-mode-map [remap isearch-occur] 'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "C-M-y") 'isearch-occur)
+
 (ergoemacs-mode 1)
 
 (require 'nlinum)
