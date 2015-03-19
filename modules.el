@@ -130,6 +130,7 @@ added at the end."
 
 ;;; Auto-complete Mode
 (require 'auto-complete)
+(setq ac-ignore-case nil)
 
 ;; Used only for C like mode
 (defun docu-args (symbol)
