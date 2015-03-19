@@ -1,0 +1,21 @@
+Ways in Solving Problems
+
+1. Backward iSearch Keymap Problem
+
+   I see in isearch-mode, isearch-mode-map is the active keymap. So I thought to redefine the Ctrl+Shift+F key. I do,
+
+#+NAME: trial
+#+BEGIN_SRC emacs-lisp
+;; Pure redefine
+(define-key isearch-mode-map (kbd "C-S-f") 'isearch-repeat-backward)
+
+(substitute-key-definition 'occur
+ 						   'isearch-repeat-backward
+ 						   isearch-mode-map)
+
+;; Similar to above
+(define-key isearch-mode-map [remap occur] 'isearch-repeat-backward)
+
+;; Well, this work!
+(define-key isearch-mode-map [remap isearch-occur] 'isearch-repeat-backward)
+#+END_SRC
