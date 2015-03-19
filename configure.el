@@ -4,6 +4,8 @@
 (setq inhibit-startup-message t
       config-changed-for-menu nil)
 
+(setq frame-title-format "Emacs - %b")
+
 (tool-bar-mode 0) ; Hide toolbar
 
 (setq backup-by-copying t                                  ; don't clobber symlinks
